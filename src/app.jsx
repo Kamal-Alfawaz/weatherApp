@@ -9,6 +9,7 @@ import arrowUp from './images/arrowUp.png'
 import settings from './images/dotMenu.png'
 import pin from './images/pin.png'
 import sunrise from './images/sunrise.png'
+import snow from './images/Snow.png'
 import './index.css'
 
 export function App() {
@@ -25,11 +26,25 @@ export function App() {
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const date = new Date(timestamp * 1000);
     if (index !== undefined) {
-      const dayIndex = (date.getDay() + index + 1) % 7;
+      const dayIndex = (date.getDay() + index) % 7;
       return daysOfWeek[dayIndex];
     }
     return daysOfWeek[date.getDay()];
   };
+
+  // This code filters out entries from the forecastData array that are for the same day
+  const filteredForecastData = forecastData.filter((data, index) => {
+    if (index === 0) return true;
+
+    // Get the date for the previous entry in the array
+    const prevDate = new Date(forecastData[index - 1].dt * 1000);
+
+    // Get the date for the current entry in the array
+    const currentDate = new Date(data.dt * 1000);
+
+    // Only include entries where the day is different from the previous entry's day
+    return prevDate.getDay() !== currentDate.getDay();
+  });
 
   // Defining a helper function to get the time of day from a UNIX timestamp  
   const getTimeOfDay = (timestamp) => {
@@ -48,6 +63,8 @@ export function App() {
         return cloudy;
       case 'Rain':
         return raining;
+      case 'Snow':
+        return snow;
       default:
         return sunnyCloudy;
     }
@@ -211,14 +228,14 @@ export function App() {
             </div>
           </div>
           <div className="forecast">
-            {forecastData.slice(1, 6).map((data, index) => (
-              <div className="forecast-item" key={index}>
-                <h2 className="day">{getDayOfWeek(data.dt, index)}</h2>
-                <img src={getWeatherIcon(data.weather[0].main)} alt="weather icon" />
-                <div className="temperature">
-                  {Math.round(data.main.temp)}&deg;C
+            {filteredForecastData.slice(1,6).map((data,index)=>(
+                <div className="forecast-item" key={index}>
+                    <h2 className="day">{getDayOfWeek(data.dt)}</h2>
+                    <img src={getWeatherIcon(data.weather[0].main)} alt="weather icon"/>
+                    <div className="temperature">
+                        {Math.round(data.main.temp)}&deg;C
+                    </div>
                 </div>
-              </div>
             ))}
           </div>
           <div className="scrollDown">
