@@ -93,6 +93,8 @@ export function App() {
         setWeather(cloudy)
       }else if (response.data.weather[0].main === 'Clear'){
         setWeather(sunny)
+      }else if (response.data.weather[0].main === 'Snow'){
+        setWeather(snow)
       }else{
         setWeather(sunnyCloudy)
       }
