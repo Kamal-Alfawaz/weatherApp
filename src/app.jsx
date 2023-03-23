@@ -25,7 +25,7 @@ export function App() {
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const date = new Date(timestamp * 1000);
     if (index !== undefined) {
-      const dayIndex = (date.getDay() + index) % 7;
+      const dayIndex = (date.getDay() + index + 1) % 7;
       return daysOfWeek[dayIndex];
     }
     return daysOfWeek[date.getDay()];
@@ -211,7 +211,7 @@ export function App() {
             </div>
           </div>
           <div className="forecast">
-            {forecastData.slice(2, 7).map((data, index) => (
+            {forecastData.slice(1, 6).map((data, index) => (
               <div className="forecast-item" key={index}>
                 <h2 className="day">{getDayOfWeek(data.dt, index)}</h2>
                 <img src={getWeatherIcon(data.weather[0].main)} alt="weather icon" />
